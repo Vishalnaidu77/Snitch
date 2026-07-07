@@ -36,6 +36,8 @@ export async function registerController(req, res) {
       });
     }
 
+    console.log(email, contact, fullname, password, isSeller);
+
     const user = await userModel.create({
         email,
         contact,
