@@ -1,8 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const Login = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false);
+
+  const { handleLogin } = useAuth()
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    await handleLogin(email, password)
+    navigate("/")
+
+    setEmail("")
+    setPassword("")
+  }
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -41,11 +57,13 @@ const Login = () => {
             Enter your details to access your account.
           </p>
 
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
             <div className="relative group">
               <input 
                 type="email" 
                 id="email" 
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 className="peer w-full border-b border-gray-300 bg-transparent py-3 text-sm text-gray-900 focus:border-black focus:outline-none transition-colors rounded-none shadow-none" 
                 placeholder=" " 
                 required
@@ -62,6 +80,8 @@ const Login = () => {
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password" 
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 className="peer w-full border-b border-gray-300 bg-transparent py-3 text-sm text-gray-900 focus:border-black focus:outline-none transition-colors rounded-none shadow-none pr-10" 
                 placeholder=" " 
                 required

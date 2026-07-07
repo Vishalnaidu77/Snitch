@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useDispatch } from 'react-redux';
-import { setLoading } from '../states/auth.slice';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,15 +31,13 @@ const Register = () => {
   const strengthColor = password.length > 0 ? strengthColors[strength] : 'bg-gray-200';
 
   const { handleRegister } = useAuth()
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     await handleRegister(fullname, email, contact, password, isSeller)
-    dispatch(setLoading(false))
-
-    console.log(contact);
+    navigate("/")
 
     setEmail('')
     setContact({

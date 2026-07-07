@@ -58,5 +58,33 @@ export async function registerController(req, res) {
 }
 
 export async function loginController(req, res) {
+  try {
+    const { email, password } = req.body;
   
+    const user = await userModel.findOne({ email })
+    if(!user){
+      return res.status(401).json({
+        message: "Invalid credentials",
+        success: false,
+        err: "Invalid credentials"
+      })
+    }
+  
+    const isMatched = await user.comparePassword(password)
+    if(!isMatched){
+      return res.status(401).json({
+        message: "Invalid credentials",
+        success: false,
+        err: "Invalid credentials"
+      })
+    }
+  
+    await sendResToken(res, user, "User logged in successfully.")
+  } catch (err) {
+    return res.status(400).json({
+      message: "Unexpected error",
+      success: false,
+      err: err.message
+    })
+  }
 }
