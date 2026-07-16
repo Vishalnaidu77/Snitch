@@ -45,7 +45,7 @@ export async function getAllProducts(req, res) {
         const seller = req.user
     
         const products = await productModel.find({ seller: seller._id })
-        if(!products){
+        if(products.length === 0){
             return res.status(404).json({
                 message: "Products not found by this seller",
                 success: false,
