@@ -40,7 +40,7 @@ export async function addProductController(req, res) {
     } 
 }
 
-export async function getAllProducts(req, res) {
+export async function getSellerProducts(req, res) {
     try {
         const seller = req.user
     
@@ -68,3 +68,28 @@ export async function getAllProducts(req, res) {
     }
 }
 
+export async function getAllProducts(req, res){
+    try {
+        const products = await productModel.find()
+
+        if(!products){
+            return res.status(404).json({
+                message: "Products not available",
+                success: false,
+                err: "Products not available"
+            })
+        }
+
+        return res.status(200).json({
+            message: "Products fetched successfully",
+            success: true,
+            products
+        })
+    } catch (err) {
+        return res.status(400).json({
+            message: "Unexpected error",
+            success: false,
+            err: err.message
+        })
+    }
+}
